@@ -6,6 +6,11 @@
 <h3 class="card-title">Bookings</h3>
 <hr />
 <br />
+<a href="/bookings/create" class="btn btn-secondary">
+	<span class="oi oi-plus"></span>
+	Add New
+</a>
+
 
 @if(Model == null)
 {
@@ -56,9 +61,9 @@ else
 
 	private async Task Delete(int id)
 	{
-		var model = Model.FirstOrDefault(q => q.Id == id);
+		var model = Model.First(q => q.Id == id);
 
-		var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete { model.Customer.TaxId }?");
+		var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete { model.Id }?");
 		if(confirm)
 		{
 			await _client.DeleteAsync($"{Endpoints.BookingsEndpoint}/{id}");
