@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CarRentalManagement.Client.Static
+﻿namespace CarRentalManagement.Client.Static
 {
     public static class Endpoints
     {
@@ -16,6 +10,5 @@ namespace CarRentalManagement.Client.Static
         public static string MakesEndpoint = $"{Prefix}/makes";
         public static string ModelsEndpoint = $"{Prefix}/models";
         public static string VehiclesEndpoint = $"{Prefix}/vehicles";
-
     }
 }
