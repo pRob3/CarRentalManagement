@@ -20,7 +20,7 @@ else
 <table class="table table-responsive">
 	<thead>
 		<tr>
-			<th>Tax ID</th>
+			<th>Full Name</th>
 			<th>Contact Number</th>
 			<th>Email Address</th>
 			<th>Actions</th>
@@ -30,7 +30,7 @@ else
 		@foreach (var item in Model)
 		{
 			<tr>
-				<td>@item.TaxId</td>
+                <td>@item.FirstName @item.LastName</td>
 				<td>@item.ContactNumber</td>
 				<td>@item.EmailAdress</td>
 				<td>
