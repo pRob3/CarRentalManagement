@@ -1,8 +1,5 @@
 ﻿@page "/colours/"
-@inject HttpClient _client
-@inject IJSRuntime _js
 @attribute [Authorize]
-
 
 <HeadingComponent Text="Colours" />
 
@@ -10,7 +7,6 @@
 	<span class="oi oi-plus"></span>
 	Add New
 </a>
-
 
 @if(Model == null)
 {
@@ -48,22 +44,5 @@ else
 }
 
 @code {
-	private List<Colour> Model;
 
-	protected async override Task OnInitializedAsync()
-	{
-		Model = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
-	}
-
-	private async Task Delete(int id)
-	{
-		var model = Model.FirstOrDefault(q => q.Id == id);
-
-		var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete { model.Name }?");
-		if(confirm)
-		{
-			await _client.DeleteAsync($"{Endpoints.ColoursEndpoint}/{id}");
-			await OnInitializedAsync();
-		}
-	}
 }
