@@ -53,7 +53,6 @@ namespace CarRentalManagement.Server.Controllers
             {
                 return BadRequest();
             }
-
             _unitOfWork.Makes.Update(make);
 
             try
@@ -71,7 +70,6 @@ namespace CarRentalManagement.Server.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
