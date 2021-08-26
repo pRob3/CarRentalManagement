@@ -1,4 +1,5 @@
-﻿using CarRentalManagement.Client.Static;
+﻿using CarRentalManagement.Client.Services;
+using CarRentalManagement.Client.Static;
 using CarRentalManagement.Shared.Domain;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -11,28 +12,35 @@ using System.Threading.Tasks;
 
 namespace CarRentalManagement.Client.Pages.Colours
 {
-    public partial class Index
+    public partial class Index : IDisposable
     {
-        [Inject] HttpClient _client { get; set; }
-        [Inject] IJSRuntime _js { get; set; }
+        [Inject] private HttpClient _client { get; set; }
+        [Inject] private IJSRuntime _js { get; set; }
+        [Inject] private HttpInterceptorService _interceptor { get; set; }
 
-		private List<Colour> Model;
+        private List<Colour> Model;
 
-		protected async override Task OnInitializedAsync()
-		{
-			Model = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
-		}
+        protected async override Task OnInitializedAsync()
+        {
+            _interceptor.MonitorEvent();
 
-		private async Task Delete(int id)
-		{
-			var model = Model.FirstOrDefault(q => q.Id == id);
+            Model = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
+        }
 
-			var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete { model.Name }?");
-			if (confirm)
-			{
-				await _client.DeleteAsync($"{Endpoints.ColoursEndpoint}/{id}");
-				await OnInitializedAsync();
-			}
-		}
-	}
+        private async Task Delete(int id)
+        {
+            var model = Model.FirstOrDefault(q => q.Id == id);
+            var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete { model.Name }?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.ColoursEndpoint}/{id}");
+                await OnInitializedAsync();
+            }
+        }
+
+        public void Dispose()
+        {
+            _interceptor.DisposeEvent();
+        }
+    }
 }
