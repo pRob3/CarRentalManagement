@@ -1,3 +1,4 @@
+using CarRentalManagement.Client.Contracts;
 using CarRentalManagement.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -27,7 +28,8 @@ namespace CarRentalManagement.Client
 
             builder.Services.AddHttpClientInterceptor();
             builder.Services.AddScoped<HttpInterceptorService>();
-
+            builder.Services.AddTransient(typeof(IHttpRepository<>), typeof(HttpRepository<>));
+            
             builder.Services.AddApiAuthorization();
 
             await builder.Build().RunAsync();

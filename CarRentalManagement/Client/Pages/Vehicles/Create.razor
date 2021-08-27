@@ -1,6 +1,4 @@
 ﻿@page "/vehicles/create"
-@inject HttpClient _client
-@inject NavigationManager _navManager
 @attribute [Authorize]
 <h3 class="card-title">Create New Vehicle</h3>
 <hr />
@@ -11,16 +9,4 @@
 
 
 @code {
-    Vehicle vehicle = new Vehicle();
-    private IList<Make> Makes;
-    private IList<Model> Models;
-    private IList<Colour> Colours;
-
-
-
-    private async Task CreateVehicle()
-    {
-        await _client.PostAsJsonAsync(Endpoints.VehiclesEndpoint, vehicle);
-        _navManager.NavigateTo("/vehicles");
-    }
 }

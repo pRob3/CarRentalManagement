@@ -1,6 +1,4 @@
 ﻿@page "/bookings/create"
-@inject HttpClient _client
-@inject NavigationManager _navManager
 @attribute [Authorize]
 
 <h3 class="card-title">Create New Booking</h3>
@@ -9,17 +7,5 @@
 
 <FormComponent ButtonText="Create Booking" booking="booking" OnValidSubmit="@CreateBooking" />
 
-
 @code {
-
-    Booking booking = new Booking
-    {
-        DateOut = DateTime.Now.Date
-    };
-
-    private async Task CreateBooking()
-    {
-        await _client.PostAsJsonAsync(Endpoints.BookingsEndpoint, booking);
-        _navManager.NavigateTo("/bookings");
-    }
 }

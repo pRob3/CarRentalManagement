@@ -20,6 +20,7 @@ else
 <table class="table">
 	<thead>
 		<tr>
+			<th></th>
 			<th>Make</th>
 			<th>Model</th>
 			<th>Year</th>
@@ -31,6 +32,7 @@ else
 		@foreach (var item in Model)
 		{
 			<tr>
+				<td><img src="@item.ImageName" style="height:150px; width:150px" /></td>
 				<td>@item.Make.Name</td>
 				<td>@item.Model.Name</td>
 				<td>@item.Year</td>

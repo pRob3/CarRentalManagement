@@ -1,6 +1,7 @@
 ﻿@page "/bookings/"
 @inject HttpClient _client
 @inject IJSRuntime _js
+@implements IDisposable
 @attribute [Authorize]
 
 <HeadingComponent Text="Bookings" />
@@ -17,7 +18,7 @@
 }
 else
 {
-<table class="table table-responsive">
+<table class="table" id="bookingsTable">
 	<thead>
 		<tr>
 			<th>Customer Tax Id</th>
@@ -53,22 +54,33 @@ else
 }
 
 @code {
-	private List<Booking> Model;
+    private List<Booking> Model;
 
-	protected async override Task OnInitializedAsync()
-	{
-		Model = await _client.GetFromJsonAsync<List<Booking>>($"{Endpoints.BookingsEndpoint}");
-	}
+    protected async override Task OnInitializedAsync()
+    {
+        Model = await _client.GetFromJsonAsync<List<Booking>>($"{Endpoints.BookingsEndpoint}");
+    }
 
-	private async Task Delete(int id)
-	{
-		var model = Model.First(q => q.Id == id);
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
 
-		var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete { model.Id }?");
-		if(confirm)
-		{
-			await _client.DeleteAsync($"{Endpoints.BookingsEndpoint}/{id}");
-			await OnInitializedAsync();
-		}
-	}
+    public void Dispose()
+    {
+        _js.InvokeVoidAsync("DataTablesDispose", "#bookingsTable");
+    }
+
+
+    private async Task Delete(int id)
+    {
+        var model = Model.First(q => q.Id == id);
+
+        var confirm = await _js.InvokeAsync<bool>("confirm", $"Do you want to delete { model.Id }?");
+        if(confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.BookingsEndpoint}/{id}");
+            await OnInitializedAsync();
+        }
+    }
 }
