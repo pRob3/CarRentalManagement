@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRentalManagement.Server.Repository
@@ -17,7 +15,7 @@ namespace CarRentalManagement.Server.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        private  UserManager<ApplicationUser> _userManager;
+        private UserManager<ApplicationUser> _userManager;
         private IGenericRepository<Make> _makes;
         private IGenericRepository<Model> _models;
         private IGenericRepository<Colour> _colours;
@@ -31,7 +29,7 @@ namespace CarRentalManagement.Server.Repository
             _userManager = userManager;
         }
 
-        public IGenericRepository<Make> Makes 
+        public IGenericRepository<Make> Makes
             => _makes ??= new GenericRepository<Make>(_context);
 
         public IGenericRepository<Model> Models
@@ -49,7 +47,6 @@ namespace CarRentalManagement.Server.Repository
         public IGenericRepository<Vehicle> Vehicles
             => _vehicles ??= new GenericRepository<Vehicle>(_context);
 
-
         public void Dispose()
         {
             _context.Dispose();
@@ -58,7 +55,6 @@ namespace CarRentalManagement.Server.Repository
 
         public async Task Save(HttpContext httpContext)
         {
-
             var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await _userManager.FindByIdAsync(userId);
 
@@ -70,7 +66,7 @@ namespace CarRentalManagement.Server.Repository
             {
                 ((BaseDomainModel)entry.Entity).DateUpdated = DateTime.Now;
                 ((BaseDomainModel)entry.Entity).UpdatedBy = user.UserName;
-                if(entry.State == EntityState.Added)
+                if (entry.State == EntityState.Added)
                 {
                     ((BaseDomainModel)entry.Entity).DateCreated = DateTime.Now;
                     ((BaseDomainModel)entry.Entity).CreatedBy = user.UserName;

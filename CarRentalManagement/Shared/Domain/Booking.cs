@@ -12,17 +12,19 @@ namespace CarRentalManagement.Shared.Domain
         [Required]
         [DataType(DataType.Date)]
         public DateTime DateOut { get; set; }
+
         public DateTime? DateIn { get; set; }
 
         [Required]
         public int CustomerId { get; set; }
+
         public virtual Customer Customer { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if(DateIn != null)
+            if (DateIn != null)
             {
-                if(DateIn <= DateOut)
+                if (DateIn <= DateOut)
                 {
                     yield return new ValidationResult("Date In must be greater than Date Out", new[] { nameof(DateIn) });
                 }

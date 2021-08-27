@@ -45,7 +45,6 @@ namespace CarRentalManagement.Server.Controllers
             if (vehicle == null)
                 return NotFound();
 
-
             return Ok(vehicle);
         }
 
@@ -59,10 +58,8 @@ namespace CarRentalManagement.Server.Controllers
             if (vehicle == null)
                 return NotFound();
 
-
             return Ok(vehicle);
         }
-
 
         // PUT: api/Vehicles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -72,10 +69,8 @@ namespace CarRentalManagement.Server.Controllers
             if (id != vehicle.Id)
                 return BadRequest();
 
-
             if (vehicle.Image != null)
                 vehicle.ImageName = CreateFile(vehicle.Image, vehicle.ImageName);
-
 
             _unitOfWork.Vehicles.Update(vehicle);
 
@@ -120,7 +115,6 @@ namespace CarRentalManagement.Server.Controllers
 
             if (vehicle == null)
                 return NotFound();
-
 
             await _unitOfWork.Vehicles.Delete(id);
             await _unitOfWork.Save(HttpContext);

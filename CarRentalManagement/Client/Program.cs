@@ -29,7 +29,7 @@ namespace CarRentalManagement.Client
             builder.Services.AddHttpClientInterceptor();
             builder.Services.AddScoped<HttpInterceptorService>();
             builder.Services.AddTransient(typeof(IHttpRepository<>), typeof(HttpRepository<>));
-            
+
             builder.Services.AddApiAuthorization();
 
             await builder.Build().RunAsync();

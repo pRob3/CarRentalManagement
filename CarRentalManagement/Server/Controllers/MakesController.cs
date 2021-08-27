@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using CarRentalManagement.Server.IRepository;
+using CarRentalManagement.Shared.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CarRentalManagement.Server.Data;
-using CarRentalManagement.Shared.Domain;
-using CarRentalManagement.Server.IRepository;
+using System.Threading.Tasks;
 
 namespace CarRentalManagement.Server.Controllers
 {
@@ -88,7 +83,6 @@ namespace CarRentalManagement.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMake(int id)
         {
-
             var make = await _unitOfWork.Makes.Get(q => q.Id == id);
             if (make == null)
             {

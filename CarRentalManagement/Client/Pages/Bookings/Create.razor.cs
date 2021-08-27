@@ -3,19 +3,16 @@ using CarRentalManagement.Client.Static;
 using CarRentalManagement.Shared.Domain;
 using Microsoft.AspNetCore.Components;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRentalManagement.Client.Pages.Bookings
 {
     public partial class Create
     {
-        [Inject] IHttpRepository<Booking> _client { get; set; }
-        [Inject] NavigationManager _navManager { get; set; }
+        [Inject] private IHttpRepository<Booking> _client { get; set; }
+        [Inject] private NavigationManager _navManager { get; set; }
 
-        Booking booking = new Booking
+        private Booking booking = new Booking
         {
             DateOut = DateTime.Now.Date
         };
@@ -27,4 +24,3 @@ namespace CarRentalManagement.Client.Pages.Bookings
         }
     }
 }
-
