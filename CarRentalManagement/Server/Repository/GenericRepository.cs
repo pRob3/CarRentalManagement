@@ -1,11 +1,11 @@
 ﻿using CarRentalManagement.Server.Data;
 using CarRentalManagement.Server.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRentalManagement.Server.Repository
@@ -21,7 +21,6 @@ namespace CarRentalManagement.Server.Repository
             _db = _context.Set<T>();
         }
 
-
         public async Task Delete(int id)
         {
             var record = await _db.FindAsync(id);
@@ -33,41 +32,35 @@ namespace CarRentalManagement.Server.Repository
             _db.RemoveRange(entities);
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includes = null)
+        public async Task<T> Get(Expression<Func<T, bool>> expression, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> query = _db;
 
-            if(includes != null)
+            if (includes != null)
             {
-                foreach (var prop in includes)
-                {
-                    query = query.Include(prop);
-                }
+                query = includes(query);
             }
 
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
-        public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, 
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, 
-            List<string> includes = null)
+        public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> query = _db;
 
-            if(expression != null)
+            if (expression != null)
             {
                 query = query.Where(expression);
             }
 
             if (includes != null)
             {
-                foreach (var prop in includes)
-                {
-                    query = query.Include(prop);
-                }
+                query = includes(query);
             }
 
-            if(orderBy != null)
+            if (orderBy != null)
             {
                 query = orderBy(query);
             }

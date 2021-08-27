@@ -2,9 +2,7 @@
 using CarRentalManagement.Shared.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,7 +13,6 @@ namespace CarRentalManagement.Server.Controllers
     [ApiController]
     public class BookingsController : ControllerBase
     {
-
         private readonly IUnitOfWork _unitOfWork;
 
         public BookingsController(IUnitOfWork unitOfWork)
@@ -28,7 +25,9 @@ namespace CarRentalManagement.Server.Controllers
         public async Task<IActionResult> GetBookings()
         {
             var includes = new List<string> { "Vehicle", "Customer" };
-            var bookings = await _unitOfWork.Bookings.GetAll(includes: includes);
+            var bookings = await _unitOfWork.Bookings.GetAll(includes: q => q
+                .Include(x => x.Vehicle).Include(x => x.Customer));
+
             return Ok(bookings);
         }
 
@@ -36,8 +35,8 @@ namespace CarRentalManagement.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBooking(int id)
         {
-            var includes = new List<string> { "Vehicle", "Customer" };
-            var booking = await _unitOfWork.Bookings.Get(q => q.Id == id, includes);
+            var booking = await _unitOfWork.Bookings.Get(q => q.Id == id, includes: q => q
+                .Include(x => x.Vehicle).Include(x => x.Customer));
 
             if (booking == null)
             {
@@ -93,7 +92,6 @@ namespace CarRentalManagement.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBooking(int id)
         {
-
             var model = await _unitOfWork.Bookings.Get(q => q.Id == id);
             if (model == null)
             {

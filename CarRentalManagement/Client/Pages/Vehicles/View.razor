@@ -1,5 +1,5 @@
 ﻿@page "/vehicles/view/{id:int}"
-@inject HttpClient _client
+@inject IHttpRepository<Vehicle> _client
 @inject NavigationManager _navManager
 @attribute [Authorize]
 
@@ -13,8 +13,7 @@
 
     protected async override Task OnParametersSetAsync()
     {
-        vehicle = await _client.GetFromJsonAsync<Vehicle>($"{Endpoints.VehiclesEndpoint}/{id}");
+        vehicle = await _client.GetDetails(Endpoints.VehiclesEndpoint, id);
     }
-
 
 }
